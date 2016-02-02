@@ -1,8 +1,8 @@
 /**
- * SmartModalDialog creates a dialog with a group of buttons as select
+ * FxosTvModalDialog creates a dialog with a group of buttons as select
  * options. It also includes open/close animation and bubbling animation.
  * The template is shown below:
- *   <smart-dialog class="modal-dialog">
+ *   <fxos-tv-dialog class="modal-dialog">
  *     <div class="outer-container">
  *       <div class="container">
  *         <div class="modal-dialog-message-container">
@@ -10,13 +10,13 @@
  *           <div class="modal-dialog-custom-group"></div>
  *         </div>
  *         <div class="modal-dialog-button-group">
- *           <smart-button></smart-button>
+ *           <fxos-tv-button></fxos-tv-button>
  *           ...
- *           <smart-button></smart-button>
+ *           <fxos-tv-button></fxos-tv-button>
  *         </div>
  *       </div>
  *     </div>
- *   </smart-dialog>
+ *   </fxos-tv-dialog>
  */
 
 (function(exports) {
@@ -24,7 +24,7 @@
 
   var DEFAULT_MARGIN = 44;
 
-  function SmartModalDialog(container, options) {
+  function FxosTvModalDialog(container, options) {
     // Determine whether this dialog is opened or not
     this._clickedIndex = null;
     this.defaultFocusIndex = -1;
@@ -40,12 +40,12 @@
   proto._init = function() {
     this._render();
 
-    this.smartBubble = document.createElement('smart-bubbles');
+    this.fxosTvBubble = document.createElement('fxos-tv-bubbles');
     this.element.addEventListener('will-open', this);
     this.element.addEventListener('will-close', this);
     this.element.addEventListener('opened', this);
     this.element.addEventListener('closed', this);
-    this.smartBubble.addEventListener('all-items-bubbled', this);
+    this.fxosTvBubble.addEventListener('all-items-bubbled', this);
   };
 
   proto._render = function() {
@@ -62,7 +62,7 @@
 
     this.buttonGroup = document.createElement('div');
     this.buttonGroup.classList.add('modal-dialog-button-group');
-    this.buttonGroup.setAttribute('smart-bubbles', 'true');
+    this.buttonGroup.setAttribute('fxos-tv-bubbles', 'true');
 
     this.innerContainer.appendChild(this.messageContainer);
     this.innerContainer.appendChild(this.buttonGroup);
@@ -101,7 +101,7 @@
 
     // Set up every button
     this.buttonSettings.forEach(function buildButton(buttonSetting, index) {
-      var button = document.createElement('smart-button');
+      var button = document.createElement('fxos-tv-button');
       button.setAttribute('type', buttonSetting.type || 'circle-text');
       button.textContent = buttonSetting.textRaw || 'OK';
       if (buttonSetting.textL10nId) {
@@ -205,7 +205,7 @@
     var elem = this._getFocusedElement();
     this._scrollTo(elem);
 
-    // move focus to smart dialog while transition running
+    // move focus to fxos-tv dialog while transition running
     if (elem.focus && (typeof elem.focus) === 'function') {
       elem.focus();
     }
@@ -258,10 +258,10 @@
           this.fireEvent('modal-dialog-' + e.type);
         } else if (e.type === 'opened') {
           this._scrollTo(this.buttonElements[0]);
-          // Play bubble animation when the smart-dialog is opened
-          this.smartBubble.play(this.buttonElements);
+          // Play bubble animation when the fxos-tv-dialog is opened
+          this.fxosTvBubble.play(this.buttonElements);
         } else if (e.type === 'closed') {
-          // Do click actions when the smart-dialog is closed
+          // Do click actions when the fxos-tv-dialog is closed
           this.element.classList.remove('visible');
           if ((this._clickedIndex || this._clickedIndex === 0) &&
               this.buttonSettings[this._clickedIndex].onClick) {
@@ -278,7 +278,7 @@
           this.fireEvent('modal-dialog-closed');
         }
         break;
-      case this.smartBubble:
+      case this.fxosTvBubble:
         this.element.classList.add('modal-dialog-opened');
         this.startKeyNavigation();
         this.focus();
@@ -287,7 +287,7 @@
     }
   };
 
-  SmartModalDialog.prototype = proto;
-  exports.SmartModalDialog = SmartModalDialog;
+  FxosTvModalDialog.prototype = proto;
+  exports.FxosTvModalDialog = FxosTvModalDialog;
 
 })(window);

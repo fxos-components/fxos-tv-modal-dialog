@@ -38,7 +38,7 @@
 .multiple-value-selector .selector-list-item.checked:after {
   position: absolute;
   right: 0;
-  font-family: 'smart-icons';
+  font-family: 'fxos-tv-icons';
   content: 'check';
   display: inline-block;
   font-weight: 500;
