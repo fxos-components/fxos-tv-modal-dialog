@@ -2,7 +2,7 @@
  * MultipleValueSelector creates a list of options, and a dialog with ok/cancel
  * buttons.
  * The template is shown below:
- *   <smart-dialog class="modal-dialog multiple-value-selector">
+ *   <fxos-tv-dialog class="modal-dialog multiple-value-selector">
  *     <div class="outer-container">
  *       <div class="container">
  *         <ul class="selector-list-container">
@@ -11,13 +11,13 @@
  *           <li class="selector-list-item">Item 3</li>
  *         </ul>
  *         <div class="modal-dialog-button-group">
- *           <smart-button></smart-button>
+ *           <fxos-tv-button></fxos-tv-button>
  *           ...
- *           <smart-button></smart-button>
+ *           <fxos-tv-button></fxos-tv-button>
  *         </div>
  *       </div>
  *     </div>
- *   </smart-dialog>
+ *   </fxos-tv-dialog>
  *
  *  options for open method:
  *    {
@@ -49,10 +49,10 @@
   var SELECTED_LIST_ITEM_SIZE = 164;
 
   function MultipleValueSelector(container) {
-    // call constructor of smart modal dialog.
+    // call constructor of fxos-tv modal dialog.
     BaseModalDialog.call(this, container);
   }
-  // extend from smart modal dialog
+  // extend from fxos-tv modal dialog
   var proto = Object.create(BaseModalDialog.prototype);
 
   var NAVIGATION_INDEX = Object.freeze({
@@ -75,11 +75,11 @@
     // render button group
     this.buttonGroup = document.createElement('div');
     this.buttonGroup.classList.add('modal-dialog-button-group');
-    this.buttonGroup.setAttribute('smart-bubbles', 'true');
+    this.buttonGroup.setAttribute('fxos-tv-bubbles', 'true');
 
     this.innerContainer.appendChild(this.buttonGroup);
 
-    this.smartBubble = document.createElement('smart-bubbles');
+    this.fxosTvBubble = document.createElement('fxos-tv-bubbles');
     this.element.classList.add('multiple-value-selector');
 
     this._initEventListeners();
@@ -93,7 +93,7 @@
     this.element.addEventListener('will-close', this);
     this.element.addEventListener('opened', this);
     this.element.addEventListener('closed', this);
-    this.smartBubble.addEventListener('all-items-bubbled', this);
+    this.fxosTvBubble.addEventListener('all-items-bubbled', this);
   };
 
   proto._render = function() {
@@ -126,7 +126,7 @@
     this.buttonGroup.innerHTML = '';
     var buttonSettings = this._options.buttonSettings;
 
-    var okButton = document.createElement('smart-button');
+    var okButton = document.createElement('fxos-tv-button');
     okButton.setAttribute('type', 'circle-text');
     if (buttonSettings && buttonSettings.l10n && buttonSettings.l10n.ok) {
       this._setL10n(okButton, buttonSettings.l10n.ok);
@@ -136,7 +136,7 @@
     okButton.classList.add('primary');
     okButton.addEventListener('click', this);
 
-    var cancelButton = document.createElement('smart-button');
+    var cancelButton = document.createElement('fxos-tv-button');
     cancelButton.setAttribute('type', 'circle-text');
     if (buttonSettings && buttonSettings.l10n && buttonSettings.l10n.cancel) {
       this._setL10n(cancelButton, buttonSettings.l10n.cancel);
@@ -168,10 +168,10 @@
             this.fireEvent('modal-dialog-' + e.type);
           } else if (e.type === 'opened') {
             this.scrollToIndex(this._listFocus);
-            // Play bubble animation when the smart-dialog is opened
-            this.smartBubble.play([this.cancelButton, this.okButton]);
+            // Play bubble animation when the fxos-tv-dialog is opened
+            this.fxosTvBubble.play([this.cancelButton, this.okButton]);
           } else if (e.type === 'closed') {
-            // Do click actions when the smart-dialog is closed
+            // Do click actions when the fxos-tv-dialog is closed
             this.element.classList.remove('visible');
             if (this._clickedButton === this.okButton && this._onSelected) {
               this._onSelected(this._selectedItems);
@@ -185,7 +185,7 @@
             this.fireEvent('modal-dialog-closed');
           }
           break;
-        case this.smartBubble:
+        case this.fxosTvBubble:
           // all items bubbled
           this.element.classList.add('modal-dialog-opened');
           this.startKeyNavigation();

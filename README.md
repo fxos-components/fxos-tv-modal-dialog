@@ -1,5 +1,5 @@
 ## Installation
 
 ```bash
-$ bower install smart-components/smart-modal-dialog
+$ bower install fxos-components/fxos-tv-modal-dialog
 ```

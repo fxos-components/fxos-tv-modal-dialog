@@ -1,9 +1,9 @@
 /**
- * SmartInputDialog creates an input text box with a clear button to clear text,
+ * FxosTvInputDialog creates an input text box with a clear button to clear text,
  * and a dialog with a group of buttons as select options, Text box includes
  * focus/blur animation, buttons includes open/close and bubbling animation.
  * The template is shown below:
- *   <smart-dialog class="modal-dialog">
+ *   <fxos-tv-dialog class="modal-dialog">
  *     <div class="outer-container">
  *       <div class="container">
  *         <div class="modal-dialog-message-container">
@@ -16,13 +16,13 @@
  *           </div>
  *         </div>
  *         <div class="modal-dialog-button-group">
- *           <smart-button></smart-button>
+ *           <fxos-tv-button></fxos-tv-button>
  *           ...
- *           <smart-button></smart-button>
+ *           <fxos-tv-button></fxos-tv-button>
  *         </div>
  *       </div>
  *     </div>
- *   </smart-dialog>
+ *   </fxos-tv-dialog>
  */
 
 (function(exports) {
@@ -32,14 +32,14 @@
   var INPUT_GROUP_INDEX = 0;
   var BUTTON_GROUP_INDEX = 1;
 
-  function SmartInputDialog(container, options) {
-    SmartModalDialog.call(this, container, options);
+  function FxosTvInputDialog(container, options) {
+    FxosTvModalDialog.call(this, container, options);
   }
 
-  var proto = Object.create(SmartModalDialog.prototype);
+  var proto = Object.create(FxosTvModalDialog.prototype);
 
   proto._render = function() {
-    SmartModalDialog.prototype._render.call(this);
+    FxosTvModalDialog.prototype._render.call(this);
     this.textInput = document.createElement('input');
     this.textInput.addEventListener('keydown', function(e) {
       if (e.keyCode === KeyEvent.DOM_VK_RIGHT) {
@@ -62,18 +62,18 @@
     this.focusBar = document.createElement('div');
     this.focusBar.classList.add('focus');
 
-    this.smartInputGroup = document.createElement('div');
-    this.smartInputGroup.classList.add('modal-dialog-input-group');
-    this.smartInputGroup.appendChild(this.textInput);
-    this.smartInputGroup.appendChild(this.clearButton);
-    this.smartInputGroup.appendChild(this.focusBar);
+    this.fxosTvInputGroup = document.createElement('div');
+    this.fxosTvInputGroup.classList.add('modal-dialog-input-group');
+    this.fxosTvInputGroup.appendChild(this.textInput);
+    this.fxosTvInputGroup.appendChild(this.clearButton);
+    this.fxosTvInputGroup.appendChild(this.focusBar);
 
-    this.messageContainer.appendChild(this.smartInputGroup);
+    this.messageContainer.appendChild(this.fxosTvInputGroup);
   };
 
   proto._init = function() {
     this.defaultFocusIndex = [-1, -1];
-    SmartModalDialog.prototype._init.call(this);
+    FxosTvModalDialog.prototype._init.call(this);
   };
 
   proto._createMessageGroup = function(options) {
@@ -139,7 +139,7 @@
 
     // Set up every button
     this.buttonSettings.forEach(function buildButton(buttonSetting, index) {
-      var button = document.createElement('smart-button');
+      var button = document.createElement('fxos-tv-button');
       button.setAttribute('type', buttonSetting.type || 'circle-text');
       if (buttonSetting.textL10nId) {
         button.setAttribute('data-l10n-id', buttonSetting.textL10nId);
@@ -270,7 +270,7 @@
     }
   };
 
-  SmartInputDialog.prototype = proto;
-  exports.SmartInputDialog = SmartInputDialog;
+  FxosTvInputDialog.prototype = proto;
+  exports.FxosTvInputDialog = FxosTvInputDialog;
 
 })(window);

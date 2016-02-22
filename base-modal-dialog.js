@@ -2,11 +2,11 @@
  * BaseModalDialog creates a dialog and handles esc key to close it. It also
  * includes open/close animation.
  * The template is shown below:
- *   <smart-dialog class="modal-dialog">
+ *   <fxos-tv-dialog class="modal-dialog">
  *     <div class="outer-container">
  *       <div class="container"></div>
  *     </div>
- *   </smart-dialog>
+ *   </fxos-tv-dialog>
  */
 
 (function(exports) {
@@ -16,8 +16,8 @@
     // Determine whether this dialog is opened or not
     this.isOpened = false;
 
-    // smart-dialog helps us to handle ESC key to close the dialog.
-    this.element = document.createElement('smart-dialog');
+    // fxos-tv-dialog helps us to handle ESC key to close the dialog.
+    this.element = document.createElement('fxos-tv-dialog');
     this.element.classList.add('modal-dialog');
     this.element.setAttribute('role', 'dialog');
     // make dialog focusable in order to catch focus from mouse click or touch
@@ -40,7 +40,7 @@
     this._init();
   }
 
-  var proto = Object.create(SmartDialog.prototype);
+  var proto = Object.create(FxosTvDialog.prototype);
 
   proto._render = function() {
     // implement rendering here.
