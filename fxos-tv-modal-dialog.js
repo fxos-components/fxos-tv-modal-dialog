@@ -27,30 +27,19 @@
   function FxosTvModalDialog(container, options) {
     // Determine whether this dialog is opened or not
     this._clickedIndex = null;
-    this.defaultFocusElement = null;
+    this.defaultFocusIndex = -1;
 
     this._margin = options && options.margin ? options.margin : DEFAULT_MARGIN;
     this._translateX = 0;
 
     BaseModalDialog.call(this, container);
-
-    this.element.id = 'fxos-tv-modal-dialog-' + this.dialogCounter;
   }
 
   var proto = Object.create(BaseModalDialog.prototype);
 
-  /**
-   * The counter for the created fxos-tv-modal-dialogs
-   * @type {Number}
-   */
-  proto._dialogCounter = -1;
-
-  Object.defineProperty(proto, 'dialogCounter', { get: function () {
-    this._dialogCounter += 1;
-    return this._dialogCounter;
-  }});
-
   proto._init = function() {
+    this._render();
+
     this.fxosTvBubble = document.createElement('fxos-tv-bubbles');
     this.element.addEventListener('will-open', this);
     this.element.addEventListener('will-close', this);
@@ -127,13 +116,13 @@
       button.addEventListener('click', function() {
         // Click action will be handled in closed event
         this._clickedIndex = index;
-        this.close();
+        this.element.close();
+        this.element.focus();
       }.bind(this));
       this.buttonElements.push(button);
       this.buttonGroup.appendChild(button);
-      if (!this.defaultFocusElement || buttonSetting.defaultFocus) {
-        this.defaultFocusElement = button;
-      }
+      this._focusedIndex =
+        (buttonSetting.defaultFocus) ? index : this._focusedIndex;
       if (renderedCallback) {
         // We add render callback to let user to do more complex visual
         // modifications.
@@ -143,22 +132,20 @@
   };
 
   proto._open = function(options) {
+    this._focusedIndex = this.defaultFocusIndex;
     this._renderMessage(options);
     this._renderButtons(options);
     BaseModalDialog.prototype._open.call(this, options);
   };
 
   proto.startKeyNavigation = function() {
-    var id = '#' + this.element.id;
-    SpatialNavigation.init();
-    SpatialNavigation.add({
-      id: this.element.id,
-      selector: id + ' button, ' + id + ' input, ' + id + ' fxos-tv-button',
-      restrict: 'self-only'
-    });
-
-    SpatialNavigation.makeFocusable();
-    SpatialNavigation.focus(this.defaultFocusElement);
+    this.element.addEventListener('keydown', this);
+    if (this.buttonElements.length > 0) {
+      if (this._focusedIndex === -1) {
+        this._focusedIndex = 0;
+      }
+      this.focus();
+    }
   };
 
   /**
@@ -197,6 +184,7 @@
       newTranslate = -nodeLeft + this._margin;
     }
 
+
     // If the new scroll offset contains first/last node, we have to align the
     // list to begin/end.
     if (lastElement.offsetLeft + lastElement.offsetWidth <=
@@ -210,7 +198,7 @@
   };
 
   proto._getFocusedElement = function() {
-    return document.activeElement;
+    return this.buttonElements[this._focusedIndex];
   };
 
   proto._focusContent = function() {
@@ -231,11 +219,38 @@
   };
 
   proto.stopKeyNavigation = function() {
-    this.defaultFocusElement = null;
-    SpatialNavigation.remove(this.element.id);
+    this.element.removeEventListener('keydown', this);
+  };
+
+  proto.movePrevious = function() {
+    if (this._focusedIndex < 1) {
+      // Do nothing when focus index is at the first button element.
+      return;
+    }
+
+    this._focusedIndex--;
+    this.focus();
+  };
+
+  proto.moveNext = function() {
+    if (this._focusedIndex > this.buttonElements.length - 2) {
+      // Do nothing when focus index is at the last button element
+      return;
+    }
+    this._focusedIndex++;
+    this.focus();
+  };
+
+  proto._handleKeyEvent = function(e) {
+    if (e.keyCode === KeyEvent.DOM_VK_LEFT) {
+      this.movePrevious();
+    } else if (e.keyCode === KeyEvent.DOM_VK_RIGHT) {
+      this.moveNext();
+    }
   };
 
   proto.handleEvent = function(e) {
+    this._handleKeyEvent(e);
 
     switch(e.target) {
       case this.element:

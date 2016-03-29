@@ -38,7 +38,6 @@
     this.container.appendChild(this.element);
 
     this._init();
-    this._render();
   }
 
   var proto = Object.create(FxosTvDialog.prototype);
